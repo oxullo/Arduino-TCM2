@@ -53,6 +53,25 @@ void setup()
     }
     Serial.println();
 
+    tcm.getSensorData(buffer);
+    Serial.print("getSensorData rc=");
+    Serial.print(rc, HEX);
+    Serial.print(" bytes: ");
+    for (uint8_t i=0 ; i < LE_GET_SENSOR_DATA ; ++i) {
+        Serial.print("[");
+        Serial.print(i);
+        Serial.print("]=");
+        Serial.print(buffer[i] & 0xff, HEX);
+        Serial.print(" ");
+    }
+    Serial.println();
+
+    float temperature;
+    tcm.getTemperature(&temperature);
+    Serial.print("getTemperature rc=");
+    Serial.print(rc, HEX);
+    Serial.print(" tempC=");
+    Serial.println(temperature);
 }
 
 void loop()

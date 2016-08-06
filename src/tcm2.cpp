@@ -46,22 +46,39 @@ void TCM2::begin()
 
 uint16_t TCM2::getDeviceInfo(char *buffer)
 {
-    return sendAndReadString(CMD_GET_DEVICE_INFO, 0x01, 0, (char *)buffer);
+    return sendAndReadString(CMD_GET_DEVICE_INFO, 0x01, 0, buffer);
 }
 
 uint16_t TCM2::getDeviceId(char *buffer)
 {
-    return sendAndReadString(CMD_GET_DEVICE_ID, 0x01, LE_GET_DEVICE_ID, (char *)buffer);
+    return sendAndReadString(CMD_GET_DEVICE_ID, 0x01, LE_GET_DEVICE_ID, buffer);
 }
 
 uint16_t TCM2::getSystemInfo(char *buffer)
 {
-    return sendAndReadString(CMD_GET_SYSTEM_INFO, 0x01, 0, (char *)buffer);
+    return sendAndReadString(CMD_GET_SYSTEM_INFO, 0x01, 0, buffer);
 }
 
 uint16_t TCM2::getSystemVersionCode(char *buffer)
 {
-    return sendAndReadString(CMD_GET_SYSTEM_VERSION_CODE, 0x01, 0x10, (char *)buffer);
+    return sendAndReadString(CMD_GET_SYSTEM_VERSION_CODE, 0x01, 0x10, buffer);
+}
+
+uint16_t TCM2::getSensorData(char *buffer)
+{
+    return sendAndReadString(CMD_GET_SENSOR_DATA, 0, LE_GET_SENSOR_DATA, buffer);
+}
+
+uint16_t TCM2::getTemperature(float *temperature)
+{
+    char buffer[2];
+    uint16_t rc = getSensorData(buffer);
+
+    if (rc == EP_SW_NORMAL_PROCESSING) {
+        *temperature = TEMPERATURE_LF_M * (float)buffer[1] + TEMPERATURE_LF_P;
+    }
+
+    return rc;
 }
 
 uint16_t TCM2::resetDataPointer()

@@ -51,5 +51,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define LE_GET_DEVICE_ID                    0x14
 #define LE_GET_SYSTEM_VERSION_CODE          0x10
+#define LE_GET_SENSOR_DATA                  0x02
 
 #endif

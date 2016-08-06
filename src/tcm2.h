@@ -32,6 +32,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define BUSY_WAIT_DELAY_US      50
 #define BUSY_RELEASE_DELAY_US   10
 
+// Linear fit for the set {31,0},{69,20},{158,55}
+#define TEMPERATURE_LF_M        0.425983
+#define TEMPERATURE_LF_P        -11.6345
+
 
 class TCM2 {
 public:
@@ -42,7 +46,9 @@ public:
     uint16_t getDeviceId(char *buffer);
     uint16_t getSystemInfo(char *buffer);
     uint16_t getSystemVersionCode(char *buffer);
-    
+    uint16_t getSensorData(char *buffer);
+    uint16_t getTemperature(float *temperature);
+
     uint16_t resetDataPointer();
     uint16_t uploadImageData(const char *buffer, uint8_t length);
     uint16_t displayUpdate();
