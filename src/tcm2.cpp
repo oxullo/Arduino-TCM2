@@ -92,6 +92,23 @@ TCM2Response TCM2::uploadImageData(const char *buffer, uint8_t length)
     return res;
 }
 
+TCM2Response TCM2::getImageData(char *buffer, uint8_t fb_slot, uint8_t length)
+{
+    return sendAndReadData(TCM2_CMD_GET_IMAGE_DATA, fb_slot, length, buffer);
+}
+
+TCM2Response TCM2::getChecksum(uint16_t *checksum, uint8_t fb_slot)
+{
+    char buffer[2];
+    TCM2Response res = sendAndReadData(TCM2_CMD_GET_CHECKSUM, fb_slot, TCM2_LE_GET_CHECKSUM, buffer);
+
+    if (res == TCM2_EP_SW_NORMAL_PROCESSING) {
+        *checksum = buffer[0] << 8 | (buffer[1] & 0xff);
+    }
+
+    return res;
+}
+
 TCM2Response TCM2::resetDataPointer()
 {
     return sendCommand(TCM2_CMD_RESET_DATA_POINTER, 0);

@@ -55,7 +55,10 @@ public:
     TCM2Response getTemperature(float *temperature);
 
     TCM2Response uploadImageData(const char *buffer, uint8_t length);
+    TCM2Response getImageData(char *buffer, uint8_t fb_slot, uint8_t length);
+    TCM2Response getChecksum(uint16_t *checksum, uint8_t fb_slot);
     TCM2Response resetDataPointer();
+
     TCM2Response displayUpdate();
 
 private:

@@ -72,6 +72,13 @@ void setup()
     Serial.print(res, HEX);
     Serial.print(" tempC=");
     Serial.println(temperature);
+
+    uint16_t checksum;
+    tcm.getChecksum(&checksum, 0);
+    Serial.print("getChecksum res=");
+    Serial.print(res, HEX);
+    Serial.print(" checksum=");
+    Serial.println(checksum, HEX);
 }
 
 void loop()
