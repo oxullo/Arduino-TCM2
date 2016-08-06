@@ -98,12 +98,12 @@ TCM2Response TCM2::uploadImageData(const char *data, uint8_t length)
     return res;
 }
 
-TCM2Response TCM2::getImageData(char *buffer, uint8_t fb_slot, uint8_t length)
+TCM2Response TCM2::getImageData(char *buffer, TCM2FramebufferSlot fb_slot, uint8_t length)
 {
     return sendAndReadData(TCM2_CMD_GET_IMAGE_DATA, fb_slot, length, buffer);
 }
 
-TCM2Response TCM2::getChecksum(uint16_t *checksum, uint8_t fb_slot)
+TCM2Response TCM2::getChecksum(uint16_t *checksum, TCM2FramebufferSlot fb_slot)
 {
     char buffer[2];
     TCM2Response res = sendAndReadData(TCM2_CMD_GET_CHECKSUM, fb_slot, TCM2_LE_GET_CHECKSUM, buffer);
@@ -120,7 +120,7 @@ TCM2Response TCM2::resetDataPointer()
     return sendCommand(TCM2_CMD_RESET_DATA_POINTER, 0);
 }
 
-TCM2Response TCM2::imageEraseFrameBuffer(uint8_t fb_slot)
+TCM2Response TCM2::imageEraseFrameBuffer(TCM2FramebufferSlot fb_slot)
 {
     return sendCommand(TCM2_CMD_IMAGE_ERASE_FRAME_BUFFER, fb_slot);
 }
@@ -142,30 +142,30 @@ TCM2Response TCM2::uploadImageSetROI(uint16_t xmin, uint16_t xmax, uint16_t ymin
     return sendCommand(TCM2_CMD_UPLOAD_IMAGE_SET_ROI, 0, TCM2_LC_UPLOAD_IMAGE_SET_ROI, buffer);
 }
 
-TCM2Response TCM2::uploadImageFixVal(const uint8_t *data, uint8_t fb_slot, uint8_t length)
+TCM2Response TCM2::uploadImageFixVal(const uint8_t *data, TCM2FramebufferSlot fb_slot, uint8_t length)
 {
     return sendCommand(TCM2_CMD_UPLOAD_IMAGE_FIX_VAL, fb_slot, length, (uint8_t *)data);
 }
 
-TCM2Response TCM2::uploadImageCopySlots(uint8_t fb_slot_dest, uint8_t fb_slot_source)
+TCM2Response TCM2::uploadImageCopySlots(TCM2FramebufferSlot fb_slot_dest, TCM2FramebufferSlot fb_slot_source)
 {
     return sendCommand(TCM2_CMD_UPLOAD_IMAGE_COPY_SLOTS, fb_slot_dest,
-            TCM2_LC_UPLOAD_IMAGE_COPY_SLOTS, &fb_slot_source);
+            TCM2_LC_UPLOAD_IMAGE_COPY_SLOTS, (uint8_t *)&fb_slot_source);
 }
 
-TCM2Response TCM2::displayUpdate(TCM2DisplayUpdateMode mode)
+TCM2Response TCM2::displayUpdate(TCM2FramebufferSlot fb_slot, TCM2DisplayUpdateMode mode)
 {
     switch (mode) {
         case TCM2_DISPLAY_UPDATE_MODE_DEFAULT:
-            return sendCommand(TCM2_CMD_DISPLAY_UPDATE_DEFAULT);
+            return sendCommand(TCM2_CMD_DISPLAY_UPDATE_DEFAULT, fb_slot);
             break;
 
         case TCM2_DISPLAY_UPDATE_MODE_FLASHLESS:
-            return sendCommand(TCM2_CMD_DISPLAY_UPDATE_FLASHLESS);
+            return sendCommand(TCM2_CMD_DISPLAY_UPDATE_FLASHLESS, fb_slot);
             break;
 
         case TCM2_DISPLAY_UPDATE_MODE_FLASHLESS_INVERTED:
-            return sendCommand(TCM2_CMD_DISPLAY_UPDATE_FLASHLESS_INV);
+            return sendCommand(TCM2_CMD_DISPLAY_UPDATE_FLASHLESS_INV, fb_slot);
             break;
     }
 }

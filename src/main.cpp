@@ -81,11 +81,11 @@ void setup()
     Serial.println(checksum, HEX);
 
     uint8_t testPattern = 1;
-    res = tcm.uploadImageFixVal(&testPattern, 0, 1);
+    res = tcm.uploadImageFixVal(&testPattern, TCM2_FRAMEBUFFER_SLOT_AUTO, 1);
     Serial.print("uploadImageFixVal res=");
     Serial.println(res, HEX);
 
-    res = tcm.displayUpdate();
+    res = tcm.displayUpdate(TCM2_FRAMEBUFFER_SLOT_AUTO);
     Serial.print("displayUpdate res=");
     Serial.println(res, HEX);
 }
