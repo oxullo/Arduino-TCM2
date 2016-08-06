@@ -79,6 +79,15 @@ void setup()
     Serial.print(res, HEX);
     Serial.print(" checksum=");
     Serial.println(checksum, HEX);
+
+    uint8_t testPattern = 1;
+    res = tcm.uploadImageFixVal(&testPattern, 0, 1);
+    Serial.print("uploadImageFixVal res=");
+    Serial.println(res, HEX);
+
+    res = tcm.displayUpdate();
+    Serial.print("displayUpdate res=");
+    Serial.println(res, HEX);
 }
 
 void loop()

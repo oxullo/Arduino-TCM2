@@ -127,7 +127,7 @@ TCM2Response TCM2::imageEraseFrameBuffer(uint8_t fb_slot)
 TCM2Response TCM2::uploadImageSetROI(uint16_t xmin, uint16_t xmax, uint16_t ymin, uint16_t ymax)
 {
     // Note: TCS2-P102 supports framebuffer slot selection, passed as P2
-    uint8_t buffer[TCM2_LE_UPLOAD_IMAGE_SET_ROI];
+    uint8_t buffer[TCM2_LC_UPLOAD_IMAGE_SET_ROI];
 
     buffer[0] = U16_MSB_TO_U8(xmin);
     buffer[1] = U16_LSB_TO_U8(xmin);
@@ -138,7 +138,18 @@ TCM2Response TCM2::uploadImageSetROI(uint16_t xmin, uint16_t xmax, uint16_t ymin
     buffer[6] = U16_MSB_TO_U8(ymax);
     buffer[7] = U16_LSB_TO_U8(ymax);
 
-    return sendCommand(TCM2_CMD_UPLOAD_IMAGE_SET_ROI, 0, TCM2_LE_UPLOAD_IMAGE_SET_ROI, buffer);
+    return sendCommand(TCM2_CMD_UPLOAD_IMAGE_SET_ROI, 0, TCM2_LC_UPLOAD_IMAGE_SET_ROI, buffer);
+}
+
+TCM2Response TCM2::uploadImageFixVal(uint8_t *buffer, uint8_t fb_slot, uint8_t length)
+{
+    return sendCommand(TCM2_CMD_UPLOAD_IMAGE_FIX_VAL, fb_slot, length, buffer);
+}
+
+TCM2Response TCM2::uploadImageCopySlots(uint8_t fb_slot_dest, uint8_t fb_slot_source)
+{
+    return sendCommand(TCM2_CMD_UPLOAD_IMAGE_COPY_SLOTS, fb_slot_dest,
+            TCM2_LC_UPLOAD_IMAGE_COPY_SLOTS, &fb_slot_source);
 }
 
 TCM2Response TCM2::displayUpdate()

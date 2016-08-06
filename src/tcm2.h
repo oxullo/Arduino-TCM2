@@ -60,6 +60,8 @@ public:
     TCM2Response resetDataPointer();
     TCM2Response imageEraseFrameBuffer(uint8_t fb_slot);
     TCM2Response uploadImageSetROI(uint16_t xmin, uint16_t xmax, uint16_t ymin, uint16_t ymax);
+    TCM2Response uploadImageFixVal(uint8_t *buffer, uint8_t fb_slot, uint8_t length);
+    TCM2Response uploadImageCopySlots(uint8_t fb_slot_dest, uint8_t fb_slot_source);
 
     TCM2Response displayUpdate();
 

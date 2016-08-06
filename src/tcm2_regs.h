@@ -53,6 +53,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TCM2_LE_GET_SYSTEM_VERSION_CODE          0x10
 #define TCM2_LE_GET_SENSOR_DATA                  0x02
 #define TCM2_LE_GET_CHECKSUM                     0x02
-#define TCM2_LE_UPLOAD_IMAGE_SET_ROI             0x08
+
+#define TCM2_LC_UPLOAD_IMAGE_SET_ROI             0x08
+#define TCM2_LC_UPLOAD_IMAGE_COPY_SLOTS          0x01
 
 #endif
