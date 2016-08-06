@@ -51,17 +51,17 @@ void TCM2::begin()
 
 uint16_t TCM2::getDeviceInfo(char *buffer)
 {
-    return sendAndReadString(0x30, 0x01, 0x01, 0x00, (char *)buffer);
+    return sendAndReadString(CMD_GET_DEVICE_INFO, 0x01, 0, (char *)buffer);
 }
 
 uint16_t TCM2::resetDataPointer()
 {
-    return sendCommand(0x20, 0x0d, 0x00);
+    return sendCommand(CMD_RESET_DATA_POINTER, 0);
 }
 
 uint16_t TCM2::uploadImageData(const char *buffer, uint8_t length)
 {
-    uint16_t rc = sendCommand(0x20, 0x01, 0x00, length, (uint8_t*)buffer);
+    uint16_t rc = sendCommand(CMD_UPLOAD_IMAGE_DATA, 0, length, (uint8_t*)buffer);
     // ErrataSheet_rA, solution 1
     delayMicroseconds(1200);
 
@@ -70,7 +70,7 @@ uint16_t TCM2::uploadImageData(const char *buffer, uint8_t length)
 
 uint16_t TCM2::displayUpdate()
 {
-    return sendCommand(0x24, 0x01, 0x00);
+    return sendCommand(CMD_DISPLAY_UPDATE_DEFAULT);
 }
 
 void TCM2::startTransmission()
@@ -99,7 +99,7 @@ void TCM2::busyWait()
     delayMicroseconds(BUSY_RELEASE_DELAY_US);
 }
 
-uint16_t TCM2::sendCommand(uint8_t ins, uint8_t p1, uint8_t p2, uint8_t lc, uint8_t *data)
+uint16_t TCM2::sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t *data)
 {
     #ifdef DEBUG
     Serial.print("INS=");
@@ -114,8 +114,8 @@ uint16_t TCM2::sendCommand(uint8_t ins, uint8_t p1, uint8_t p2, uint8_t lc, uint
     #endif
 
     startTransmission();
-    SPI.transfer(ins);
-    SPI.transfer(p1);
+    SPI.transfer(ins_p1 >> 8);
+    SPI.transfer(ins_p1 & 0xff);
     SPI.transfer(p2);
 
     if (lc) {
@@ -126,7 +126,7 @@ uint16_t TCM2::sendCommand(uint8_t ins, uint8_t p1, uint8_t p2, uint8_t lc, uint
     busyWait();
 
     startTransmission();
-    uint16_t rc = (SPI.transfer(0x00) << 8) | SPI.transfer(0x00);
+    uint16_t rc = (SPI.transfer(0) << 8) | SPI.transfer(0);
     endTransmission();
     busyWait();
 
@@ -142,11 +142,21 @@ uint16_t TCM2::sendCommand(uint8_t ins, uint8_t p1, uint8_t p2, uint8_t lc, uint
     return rc;
 }
 
-uint16_t TCM2::sendAndReadString(uint8_t ins, uint8_t p1, uint8_t p2, uint8_t le, char *buffer)
+uint16_t TCM2::sendCommand(uint16_t ins_p1)
+{
+    return sendCommand(ins_p1, 0, 0, NULL);
+}
+
+uint16_t TCM2::sendCommand(uint16_t ins_p1, uint8_t p2)
+{
+    return sendCommand(ins_p1, p2, 0, NULL);
+}
+
+uint16_t TCM2::sendAndReadString(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer)
 {
     startTransmission();
-    SPI.transfer(ins);
-    SPI.transfer(p1);
+    SPI.transfer(ins_p1 >> 8);
+    SPI.transfer(ins_p1 & 0xff);
     SPI.transfer(p2);
     SPI.transfer(le);
     endTransmission();
@@ -157,7 +167,7 @@ uint16_t TCM2::sendAndReadString(uint8_t ins, uint8_t p1, uint8_t p2, uint8_t le
     char ch;
     uint8_t i=0;
     do {
-        ch = SPI.transfer(0x00);
+        ch = SPI.transfer(0);
         buffer[i++] = ch;
 
         #ifdef DEBUG
@@ -166,16 +176,11 @@ uint16_t TCM2::sendAndReadString(uint8_t ins, uint8_t p1, uint8_t p2, uint8_t le
         #endif
     } while (ch);
 
-    uint16_t rc = (SPI.transfer(0x00) << 8) | SPI.transfer(0x00);
+    uint16_t rc = (SPI.transfer(0) << 8) | SPI.transfer(0);
     endTransmission();
     busyWait();
 
     return rc;
-}
-
-uint16_t TCM2::sendCommand(uint8_t ins, uint8_t p1, uint8_t p2)
-{
-    return sendCommand(ins, p1, p2, 0, NULL);
 }
 
 void TCM2::dumpLinesStates()

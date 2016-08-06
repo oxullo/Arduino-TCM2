@@ -52,9 +52,10 @@ private:
     void startTransmission();
     void endTransmission();
     void busyWait();
-    uint16_t sendCommand(uint8_t ins, uint8_t p1, uint8_t p2, uint8_t lc, uint8_t *data);
-    uint16_t sendAndReadString(uint8_t ins, uint8_t p1, uint8_t p2, uint8_t le, char *buffer);
-    uint16_t sendCommand(uint8_t ins, uint8_t p1, uint8_t p2);
+    uint16_t sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t *data);
+    uint16_t sendCommand(uint16_t ins_p1, uint8_t p2);
+    uint16_t sendCommand(uint16_t ins_p1);
+    uint16_t sendAndReadString(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer);
     void dumpLinesStates();
 };
 
