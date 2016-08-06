@@ -40,22 +40,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Check TCS2-P_ErrataSheet_rA.pdf page 3
 #define TCM2_APPLY_UPLOAD_IMAGE_DATA_WORKAROUND
 
+typedef uint16_t TCM2Response;
 
 class TCM2 {
 public:
     TCM2(uint8_t tc_busy_pin_, uint8_t tc_enable_pin_, uint8_t ss_pin_=SS);
 
     void begin();
-    uint16_t getDeviceInfo(char *buffer);
-    uint16_t getDeviceId(char *buffer);
-    uint16_t getSystemInfo(char *buffer);
-    uint16_t getSystemVersionCode(char *buffer);
-    uint16_t getSensorData(char *buffer);
-    uint16_t getTemperature(float *temperature);
+    TCM2Response getDeviceInfo(char *buffer);
+    TCM2Response getDeviceId(char *buffer);
+    TCM2Response getSystemInfo(char *buffer);
+    TCM2Response getSystemVersionCode(char *buffer);
+    TCM2Response getSensorData(char *buffer);
+    TCM2Response getTemperature(float *temperature);
 
-    uint16_t resetDataPointer();
-    uint16_t uploadImageData(const char *buffer, uint8_t length);
-    uint16_t displayUpdate();
+    TCM2Response uploadImageData(const char *buffer, uint8_t length);
+    TCM2Response resetDataPointer();
+    TCM2Response displayUpdate();
 
 private:
     static SPISettings spiSettings;
@@ -66,10 +67,10 @@ private:
     void startTransmission();
     void endTransmission();
     void busyWait();
-    uint16_t sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t *data);
-    uint16_t sendCommand(uint16_t ins_p1, uint8_t p2);
-    uint16_t sendCommand(uint16_t ins_p1);
-    uint16_t sendAndReadString(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer);
+    TCM2Response sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t *data);
+    TCM2Response sendCommand(uint16_t ins_p1, uint8_t p2);
+    TCM2Response sendCommand(uint16_t ins_p1);
+    TCM2Response sendAndReadString(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer);
     void dumpLinesStates();
 };
 

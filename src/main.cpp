@@ -13,17 +13,17 @@ void setup()
     tcm.begin();
     char buffer[64];
 
-    uint16_t rc;
+    TCM2Response res;
 
-    rc = tcm.getDeviceInfo(buffer);
-    Serial.print("getDeviceInfo rc=");
-    Serial.print(rc, HEX);
+    res = tcm.getDeviceInfo(buffer);
+    Serial.print("getDeviceInfo res=");
+    Serial.print(res, HEX);
     Serial.print(" data=");
     Serial.println(buffer);
 
     tcm.getDeviceId(buffer);
-    Serial.print("getDeviceId rc=");
-    Serial.print(rc, HEX);
+    Serial.print("getDeviceId res=");
+    Serial.print(res, HEX);
     Serial.print(" bytes: ");
     for (uint8_t i=0 ; i < TCM2_LE_GET_DEVICE_ID ; ++i) {
         Serial.print("[");
@@ -34,15 +34,15 @@ void setup()
     }
     Serial.println();
 
-    rc = tcm.getSystemInfo(buffer);
-    Serial.print("getSystemInfo rc=");
-    Serial.print(rc, HEX);
+    res = tcm.getSystemInfo(buffer);
+    Serial.print("getSystemInfo res=");
+    Serial.print(res, HEX);
     Serial.print(" data=");
     Serial.println(buffer);
 
     tcm.getSystemVersionCode(buffer);
-    Serial.print("getSystemVersionCode rc=");
-    Serial.print(rc, HEX);
+    Serial.print("getSystemVersionCode res=");
+    Serial.print(res, HEX);
     Serial.print(" bytes: ");
     for (uint8_t i=0 ; i < TCM2_LE_GET_SYSTEM_VERSION_CODE ; ++i) {
         Serial.print("[");
@@ -54,8 +54,8 @@ void setup()
     Serial.println();
 
     tcm.getSensorData(buffer);
-    Serial.print("getSensorData rc=");
-    Serial.print(rc, HEX);
+    Serial.print("getSensorData res=");
+    Serial.print(res, HEX);
     Serial.print(" bytes: ");
     for (uint8_t i=0 ; i < TCM2_LE_GET_SENSOR_DATA ; ++i) {
         Serial.print("[");
@@ -68,8 +68,8 @@ void setup()
 
     float temperature;
     tcm.getTemperature(&temperature);
-    Serial.print("getTemperature rc=");
-    Serial.print(rc, HEX);
+    Serial.print("getTemperature res=");
+    Serial.print(res, HEX);
     Serial.print(" tempC=");
     Serial.println(temperature);
 }

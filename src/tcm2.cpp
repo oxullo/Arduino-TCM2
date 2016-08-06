@@ -44,60 +44,60 @@ void TCM2::begin()
     busyWait();
 }
 
-uint16_t TCM2::getDeviceInfo(char *buffer)
+TCM2Response TCM2::getDeviceInfo(char *buffer)
 {
     return sendAndReadString(TCM2_CMD_GET_DEVICE_INFO, 0x01, 0, buffer);
 }
 
-uint16_t TCM2::getDeviceId(char *buffer)
+TCM2Response TCM2::getDeviceId(char *buffer)
 {
     return sendAndReadString(TCM2_CMD_GET_DEVICE_ID, 0x01, TCM2_LE_GET_DEVICE_ID, buffer);
 }
 
-uint16_t TCM2::getSystemInfo(char *buffer)
+TCM2Response TCM2::getSystemInfo(char *buffer)
 {
     return sendAndReadString(TCM2_CMD_GET_SYSTEM_INFO, 0x01, 0, buffer);
 }
 
-uint16_t TCM2::getSystemVersionCode(char *buffer)
+TCM2Response TCM2::getSystemVersionCode(char *buffer)
 {
     return sendAndReadString(TCM2_CMD_GET_SYSTEM_VERSION_CODE, 0x01, 0x10, buffer);
 }
 
-uint16_t TCM2::getSensorData(char *buffer)
+TCM2Response TCM2::getSensorData(char *buffer)
 {
     return sendAndReadString(TCM2_CMD_GET_SENSOR_DATA, 0, TCM2_LE_GET_SENSOR_DATA, buffer);
 }
 
-uint16_t TCM2::getTemperature(float *temperature)
+TCM2Response TCM2::getTemperature(float *temperature)
 {
     char buffer[2];
-    uint16_t rc = getSensorData(buffer);
+    TCM2Response res = getSensorData(buffer);
 
-    if (rc == TCM2_EP_SW_NORMAL_PROCESSING) {
+    if (res == TCM2_EP_SW_NORMAL_PROCESSING) {
         *temperature = TCM2_TEMPERATURE_LF_M * (float)buffer[1] + TCM2_TEMPERATURE_LF_P;
     }
 
-    return rc;
+    return res;
 }
 
-uint16_t TCM2::resetDataPointer()
+TCM2Response TCM2::uploadImageData(const char *buffer, uint8_t length)
 {
-    return sendCommand(TCM2_CMD_RESET_DATA_POINTER, 0);
-}
-
-uint16_t TCM2::uploadImageData(const char *buffer, uint8_t length)
-{
-    uint16_t rc = sendCommand(TCM2_CMD_UPLOAD_IMAGE_DATA, 0, length, (uint8_t*)buffer);
+    TCM2Response res = sendCommand(TCM2_CMD_UPLOAD_IMAGE_DATA, 0, length, (uint8_t*)buffer);
     #ifdef TCM2_APPLY_UPLOAD_IMAGE_DATA_WORKAROUND
     // ErrataSheet_rA, solution 1
     delayMicroseconds(1200);
     #endif
 
-    return rc;
+    return res;
 }
 
-uint16_t TCM2::displayUpdate()
+TCM2Response TCM2::resetDataPointer()
+{
+    return sendCommand(TCM2_CMD_RESET_DATA_POINTER, 0);
+}
+
+TCM2Response TCM2::displayUpdate()
 {
     return sendCommand(TCM2_CMD_DISPLAY_UPDATE_DEFAULT);
 }
@@ -128,7 +128,7 @@ void TCM2::busyWait()
     delayMicroseconds(TCM2_BUSY_RELEASE_DELAY_US);
 }
 
-uint16_t TCM2::sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t *data)
+TCM2Response TCM2::sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t *data)
 {
     #ifdef DEBUG
     Serial.print("INS=");
@@ -155,33 +155,33 @@ uint16_t TCM2::sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t *dat
     busyWait();
 
     startTransmission();
-    uint16_t rc = (SPI.transfer(0) << 8) | SPI.transfer(0);
+    TCM2Response res = (SPI.transfer(0) << 8) | SPI.transfer(0);
     endTransmission();
     busyWait();
 
     #ifdef DEBUG
-    if (rc != TCM2_EP_SW_NORMAL_PROCESSING) {
+    if (res != TCM2_EP_SW_NORMAL_PROCESSING) {
         Serial.print(" ERR=");
-        Serial.println(rc, HEX);
+        Serial.println(res, HEX);
     } else {
         Serial.println("OK");
     }
     #endif
 
-    return rc;
+    return res;
 }
 
-uint16_t TCM2::sendCommand(uint16_t ins_p1)
+TCM2Response TCM2::sendCommand(uint16_t ins_p1)
 {
     return sendCommand(ins_p1, 0, 0, NULL);
 }
 
-uint16_t TCM2::sendCommand(uint16_t ins_p1, uint8_t p2)
+TCM2Response TCM2::sendCommand(uint16_t ins_p1, uint8_t p2)
 {
     return sendCommand(ins_p1, p2, 0, NULL);
 }
 
-uint16_t TCM2::sendAndReadString(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer)
+TCM2Response TCM2::sendAndReadString(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer)
 {
     startTransmission();
     SPI.transfer(ins_p1 >> 8);
@@ -211,11 +211,11 @@ uint16_t TCM2::sendAndReadString(uint16_t ins_p1, uint8_t p2, uint8_t le, char *
         }
     }
 
-    uint16_t rc = (SPI.transfer(0) << 8) | SPI.transfer(0);
+    TCM2Response res = (SPI.transfer(0) << 8) | SPI.transfer(0);
     endTransmission();
     busyWait();
 
-    return rc;
+    return res;
 }
 
 void TCM2::dumpLinesStates()
