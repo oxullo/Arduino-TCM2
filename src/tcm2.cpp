@@ -18,6 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "tcm2.h"
 
+#define U16_MSB_TO_U8(u16) ((u16 >> 8) & 0xff)
+#define U16_LSB_TO_U8(u16) (u16 & 0xff)
+#define U8_TO_U16_MSB(u8) ((u8 & 0xff) << 8)
+#define U8_TO_U16_LSB(u8) (u8 & 0xff)
+
 SPISettings TCM2::spiSettings(TCM2_SPI_SPEED, MSBFIRST, SPI_MODE3);
 
 TCM2::TCM2(uint8_t tc_busy_pin_, uint8_t tc_enable_pin_, uint8_t ss_pin_) :
@@ -103,7 +108,7 @@ TCM2Response TCM2::getChecksum(uint16_t *checksum, uint8_t fb_slot)
     TCM2Response res = sendAndReadData(TCM2_CMD_GET_CHECKSUM, fb_slot, TCM2_LE_GET_CHECKSUM, buffer);
 
     if (res == TCM2_EP_SW_NORMAL_PROCESSING) {
-        *checksum = buffer[0] << 8 | (buffer[1] & 0xff);
+        *checksum = U8_TO_U16_MSB(buffer[0]) | U8_TO_U16_LSB(buffer[1]);
     }
 
     return res;
@@ -124,14 +129,14 @@ TCM2Response TCM2::uploadImageSetROI(uint16_t xmin, uint16_t xmax, uint16_t ymin
     // Note: TCS2-P102 supports framebuffer slot selection, passed as P2
     uint8_t buffer[TCM2_LE_UPLOAD_IMAGE_SET_ROI];
 
-    buffer[0] = xmin >> 8;
-    buffer[1] = xmin & 0xff;
-    buffer[2] = xmax >> 8;
-    buffer[3] = xmax & 0xff;
-    buffer[4] = ymin >> 8;
-    buffer[5] = ymin & 0xff;
-    buffer[6] = ymax >> 8;
-    buffer[7] = ymax & 0xff;
+    buffer[0] = U16_MSB_TO_U8(xmin);
+    buffer[1] = U16_LSB_TO_U8(xmin);
+    buffer[2] = U16_MSB_TO_U8(xmax);
+    buffer[3] = U16_LSB_TO_U8(xmax);
+    buffer[4] = U16_MSB_TO_U8(ymin);
+    buffer[5] = U16_LSB_TO_U8(ymin);
+    buffer[6] = U16_MSB_TO_U8(ymax);
+    buffer[7] = U16_LSB_TO_U8(ymax);
 
     return sendCommand(TCM2_CMD_UPLOAD_IMAGE_SET_ROI, 0, TCM2_LE_UPLOAD_IMAGE_SET_ROI, buffer);
 }
@@ -182,8 +187,8 @@ TCM2Response TCM2::sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t 
     #endif
 
     startTransmission();
-    SPI.transfer(ins_p1 >> 8);
-    SPI.transfer(ins_p1 & 0xff);
+    SPI.transfer(U16_MSB_TO_U8(ins_p1));
+    SPI.transfer(U16_LSB_TO_U8(ins_p1));
     SPI.transfer(p2);
 
     if (lc) {
@@ -223,8 +228,8 @@ TCM2Response TCM2::sendCommand(uint16_t ins_p1, uint8_t p2)
 TCM2Response TCM2::sendAndReadData(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer)
 {
     startTransmission();
-    SPI.transfer(ins_p1 >> 8);
-    SPI.transfer(ins_p1 & 0xff);
+    SPI.transfer(U16_MSB_TO_U8(ins_p1));
+    SPI.transfer(U16_LSB_TO_U8(ins_p1));
     SPI.transfer(p2);
     SPI.transfer(le);
     endTransmission();
@@ -250,7 +255,7 @@ TCM2Response TCM2::sendAndReadData(uint16_t ins_p1, uint8_t p2, uint8_t le, char
         }
     }
 
-    TCM2Response res = (SPI.transfer(0) << 8) | SPI.transfer(0);
+    TCM2Response res = U8_TO_U16_MSB(SPI.transfer(0)) | U8_TO_U16_LSB(SPI.transfer(0));
     endTransmission();
     busyWait();
 
