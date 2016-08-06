@@ -70,7 +70,7 @@ private:
     TCM2Response sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t *data);
     TCM2Response sendCommand(uint16_t ins_p1, uint8_t p2);
     TCM2Response sendCommand(uint16_t ins_p1);
-    TCM2Response sendAndReadString(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer);
+    TCM2Response sendAndReadData(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer);
     void dumpLinesStates();
 };
 

@@ -46,27 +46,27 @@ void TCM2::begin()
 
 TCM2Response TCM2::getDeviceInfo(char *buffer)
 {
-    return sendAndReadString(TCM2_CMD_GET_DEVICE_INFO, 0x01, 0, buffer);
+    return sendAndReadData(TCM2_CMD_GET_DEVICE_INFO, 0x01, 0, buffer);
 }
 
 TCM2Response TCM2::getDeviceId(char *buffer)
 {
-    return sendAndReadString(TCM2_CMD_GET_DEVICE_ID, 0x01, TCM2_LE_GET_DEVICE_ID, buffer);
+    return sendAndReadData(TCM2_CMD_GET_DEVICE_ID, 0x01, TCM2_LE_GET_DEVICE_ID, buffer);
 }
 
 TCM2Response TCM2::getSystemInfo(char *buffer)
 {
-    return sendAndReadString(TCM2_CMD_GET_SYSTEM_INFO, 0x01, 0, buffer);
+    return sendAndReadData(TCM2_CMD_GET_SYSTEM_INFO, 0x01, 0, buffer);
 }
 
 TCM2Response TCM2::getSystemVersionCode(char *buffer)
 {
-    return sendAndReadString(TCM2_CMD_GET_SYSTEM_VERSION_CODE, 0x01, 0x10, buffer);
+    return sendAndReadData(TCM2_CMD_GET_SYSTEM_VERSION_CODE, 0x01, 0x10, buffer);
 }
 
 TCM2Response TCM2::getSensorData(char *buffer)
 {
-    return sendAndReadString(TCM2_CMD_GET_SENSOR_DATA, 0, TCM2_LE_GET_SENSOR_DATA, buffer);
+    return sendAndReadData(TCM2_CMD_GET_SENSOR_DATA, 0, TCM2_LE_GET_SENSOR_DATA, buffer);
 }
 
 TCM2Response TCM2::getTemperature(float *temperature)
@@ -181,7 +181,7 @@ TCM2Response TCM2::sendCommand(uint16_t ins_p1, uint8_t p2)
     return sendCommand(ins_p1, p2, 0, NULL);
 }
 
-TCM2Response TCM2::sendAndReadString(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer)
+TCM2Response TCM2::sendAndReadData(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer)
 {
     startTransmission();
     SPI.transfer(ins_p1 >> 8);
