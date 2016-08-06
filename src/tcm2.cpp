@@ -89,8 +89,10 @@ uint16_t TCM2::resetDataPointer()
 uint16_t TCM2::uploadImageData(const char *buffer, uint8_t length)
 {
     uint16_t rc = sendCommand(TCM2_CMD_UPLOAD_IMAGE_DATA, 0, length, (uint8_t*)buffer);
+    #ifdef TCM2_APPLY_UPLOAD_IMAGE_DATA_WORKAROUND
     // ErrataSheet_rA, solution 1
     delayMicroseconds(1200);
+    #endif
 
     return rc;
 }

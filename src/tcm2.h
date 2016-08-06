@@ -36,6 +36,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TCM2_TEMPERATURE_LF_M        0.425983
 #define TCM2_TEMPERATURE_LF_P        -11.6345
 
+// Avoid to send data to the TC right after uploading an image data chunk
+// Check TCS2-P_ErrataSheet_rA.pdf page 3
+#define TCM2_APPLY_UPLOAD_IMAGE_DATA_WORKAROUND
+
 
 class TCM2 {
 public:
