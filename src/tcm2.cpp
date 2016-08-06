@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define U8_TO_U16_MSB(u8) ((u8 & 0xff) << 8)
 #define U8_TO_U16_LSB(u8) (u8 & 0xff)
 
+// CPOL=1, CPHA=1, MSB first, SS polarity=active low
 SPISettings TCM2::spiSettings(TCM2_SPI_SPEED, MSBFIRST, SPI_MODE3);
 
 TCM2::TCM2(uint8_t tc_busy_pin_, uint8_t tc_enable_pin_, uint8_t ss_pin_) :
@@ -86,9 +87,9 @@ TCM2Response TCM2::getTemperature(float *temperature)
     return res;
 }
 
-TCM2Response TCM2::uploadImageData(const char *buffer, uint8_t length)
+TCM2Response TCM2::uploadImageData(const char *data, uint8_t length)
 {
-    TCM2Response res = sendCommand(TCM2_CMD_UPLOAD_IMAGE_DATA, 0, length, (uint8_t*)buffer);
+    TCM2Response res = sendCommand(TCM2_CMD_UPLOAD_IMAGE_DATA, 0, length, (uint8_t *)data);
     #ifdef TCM2_APPLY_UPLOAD_IMAGE_DATA_WORKAROUND
     // ErrataSheet_rA, solution 1
     delayMicroseconds(1200);
@@ -141,9 +142,9 @@ TCM2Response TCM2::uploadImageSetROI(uint16_t xmin, uint16_t xmax, uint16_t ymin
     return sendCommand(TCM2_CMD_UPLOAD_IMAGE_SET_ROI, 0, TCM2_LC_UPLOAD_IMAGE_SET_ROI, buffer);
 }
 
-TCM2Response TCM2::uploadImageFixVal(uint8_t *buffer, uint8_t fb_slot, uint8_t length)
+TCM2Response TCM2::uploadImageFixVal(const uint8_t *data, uint8_t fb_slot, uint8_t length)
 {
-    return sendCommand(TCM2_CMD_UPLOAD_IMAGE_FIX_VAL, fb_slot, length, buffer);
+    return sendCommand(TCM2_CMD_UPLOAD_IMAGE_FIX_VAL, fb_slot, length, (uint8_t *)data);
 }
 
 TCM2Response TCM2::uploadImageCopySlots(uint8_t fb_slot_dest, uint8_t fb_slot_source)

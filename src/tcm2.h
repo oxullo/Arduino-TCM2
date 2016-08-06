@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "tcm2_regs.h"
 
+// SPI interface speed. 1MHz seems to be the safest option
 #define TCM2_SPI_SPEED           1E06
 
 #define TCM2_MAX_CHUNK_SIZE      0xfa
@@ -59,13 +60,13 @@ public:
     TCM2Response getSensorData(char *buffer);
     TCM2Response getTemperature(float *temperature);
 
-    TCM2Response uploadImageData(const char *buffer, uint8_t length);
+    TCM2Response uploadImageData(const char *data, uint8_t length);
     TCM2Response getImageData(char *buffer, uint8_t fb_slot, uint8_t length);
     TCM2Response getChecksum(uint16_t *checksum, uint8_t fb_slot);
     TCM2Response resetDataPointer();
     TCM2Response imageEraseFrameBuffer(uint8_t fb_slot);
     TCM2Response uploadImageSetROI(uint16_t xmin, uint16_t xmax, uint16_t ymin, uint16_t ymax);
-    TCM2Response uploadImageFixVal(uint8_t *buffer, uint8_t fb_slot, uint8_t length);
+    TCM2Response uploadImageFixVal(const uint8_t *data, uint8_t fb_slot, uint8_t length);
     TCM2Response uploadImageCopySlots(uint8_t fb_slot_dest, uint8_t fb_slot_source);
 
     TCM2Response displayUpdate(TCM2DisplayUpdateMode mode=TCM2_DISPLAY_UPDATE_MODE_DEFAULT);
