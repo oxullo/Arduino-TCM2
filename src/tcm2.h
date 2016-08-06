@@ -39,6 +39,10 @@ public:
 
     void begin();
     uint16_t getDeviceInfo(char *buffer);
+    uint16_t getDeviceId(char *buffer);
+    uint16_t getSystemInfo(char *buffer);
+    uint16_t getSystemVersionCode(char *buffer);
+    
     uint16_t resetDataPointer();
     uint16_t uploadImageData(const char *buffer, uint8_t length);
     uint16_t displayUpdate();

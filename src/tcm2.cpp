@@ -49,6 +49,21 @@ uint16_t TCM2::getDeviceInfo(char *buffer)
     return sendAndReadString(CMD_GET_DEVICE_INFO, 0x01, 0, (char *)buffer);
 }
 
+uint16_t TCM2::getDeviceId(char *buffer)
+{
+    return sendAndReadString(CMD_GET_DEVICE_ID, 0x01, LE_GET_DEVICE_ID, (char *)buffer);
+}
+
+uint16_t TCM2::getSystemInfo(char *buffer)
+{
+    return sendAndReadString(CMD_GET_SYSTEM_INFO, 0x01, 0, (char *)buffer);
+}
+
+uint16_t TCM2::getSystemVersionCode(char *buffer)
+{
+    return sendAndReadString(CMD_GET_SYSTEM_VERSION_CODE, 0x01, 0x10, (char *)buffer);
+}
+
 uint16_t TCM2::resetDataPointer()
 {
     return sendCommand(CMD_RESET_DATA_POINTER, 0);
@@ -159,17 +174,23 @@ uint16_t TCM2::sendAndReadString(uint16_t ins_p1, uint8_t p2, uint8_t le, char *
 
     startTransmission();
 
-    char ch;
-    uint8_t i=0;
-    do {
-        ch = SPI.transfer(0);
-        buffer[i++] = ch;
+    if (le) {
+        // Fixed size response expected
+        for (uint8_t i = 0 ; i < le ; ++i) {
+            buffer[i] = SPI.transfer(0);
+        }
+    } else {
+        // Read until zero byte
+        uint8_t i = 0;
+        while (1) {
+            char ch = SPI.transfer(0);
+            buffer[i++] = ch;
 
-        #ifdef DEBUG
-        Serial.print("CH=");
-        Serial.println(ch, HEX);
-        #endif
-    } while (ch);
+            if (ch == 0) {
+                break;
+            }
+        }
+    }
 
     uint16_t rc = (SPI.transfer(0) << 8) | SPI.transfer(0);
     endTransmission();
