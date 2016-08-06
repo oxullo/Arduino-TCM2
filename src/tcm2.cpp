@@ -30,8 +30,6 @@ TCM2::TCM2(uint8_t tc_busy_pin_, uint8_t tc_enable_pin_, uint8_t ss_pin_) :
 void TCM2::begin()
 {
     SPI.begin();
-    // pinMode(LED_PIN, OUTPUT);
-    // digitalWrite(LED_PIN, HIGH);
 
     digitalWrite(ss_pin, HIGH);
     pinMode(ss_pin, OUTPUT);
@@ -40,13 +38,10 @@ void TCM2::begin()
     SPI.beginTransaction(spiSettings);
     SPI.endTransaction();
 
-    // Serial.println("Waking up TCM");
     pinMode(tc_enable_pin, OUTPUT);
     digitalWrite(tc_enable_pin, LOW);
     delay(100);
     busyWait();
-
-    // dumpLinesStates();
 }
 
 uint16_t TCM2::getDeviceInfo(char *buffer)
