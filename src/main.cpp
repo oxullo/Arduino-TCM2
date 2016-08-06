@@ -25,7 +25,7 @@ void setup()
     Serial.print("getDeviceId rc=");
     Serial.print(rc, HEX);
     Serial.print(" bytes: ");
-    for (uint8_t i=0 ; i < LE_GET_DEVICE_ID ; ++i) {
+    for (uint8_t i=0 ; i < TCM2_LE_GET_DEVICE_ID ; ++i) {
         Serial.print("[");
         Serial.print(i);
         Serial.print("]=");
@@ -44,7 +44,7 @@ void setup()
     Serial.print("getSystemVersionCode rc=");
     Serial.print(rc, HEX);
     Serial.print(" bytes: ");
-    for (uint8_t i=0 ; i < LE_GET_SYSTEM_VERSION_CODE ; ++i) {
+    for (uint8_t i=0 ; i < TCM2_LE_GET_SYSTEM_VERSION_CODE ; ++i) {
         Serial.print("[");
         Serial.print(i);
         Serial.print("]=");
@@ -57,7 +57,7 @@ void setup()
     Serial.print("getSensorData rc=");
     Serial.print(rc, HEX);
     Serial.print(" bytes: ");
-    for (uint8_t i=0 ; i < LE_GET_SENSOR_DATA ; ++i) {
+    for (uint8_t i=0 ; i < TCM2_LE_GET_SENSOR_DATA ; ++i) {
         Serial.print("[");
         Serial.print(i);
         Serial.print("]=");

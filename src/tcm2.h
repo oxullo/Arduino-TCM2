@@ -23,18 +23,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "tcm2_regs.h"
 
-#define SPI_SPEED           1E06
+#define TCM2_SPI_SPEED           1E06
 
-#define MAX_CHUNK_SIZE      0xfa
+#define TCM2_MAX_CHUNK_SIZE      0xfa
 
-#define SS_ASSERT_DELAY_US      10
-#define SS_DEASSERT_DELAY_US    10
-#define BUSY_WAIT_DELAY_US      50
-#define BUSY_RELEASE_DELAY_US   10
+#define TCM2_SS_ASSERT_DELAY_US      10
+#define TCM2_SS_DEASSERT_DELAY_US    10
+#define TCM2_BUSY_WAIT_DELAY_US      50
+#define TCM2_BUSY_RELEASE_DELAY_US   10
 
 // Linear fit for the set {31,0},{69,20},{158,55}
-#define TEMPERATURE_LF_M        0.425983
-#define TEMPERATURE_LF_P        -11.6345
+#define TCM2_TEMPERATURE_LF_M        0.425983
+#define TCM2_TEMPERATURE_LF_P        -11.6345
 
 
 class TCM2 {

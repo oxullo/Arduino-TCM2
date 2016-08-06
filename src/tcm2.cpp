@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "tcm2.h"
 
-SPISettings TCM2::spiSettings(SPI_SPEED, MSBFIRST, SPI_MODE3);
+SPISettings TCM2::spiSettings(TCM2_SPI_SPEED, MSBFIRST, SPI_MODE3);
 
 TCM2::TCM2(uint8_t tc_busy_pin_, uint8_t tc_enable_pin_, uint8_t ss_pin_) :
     tc_busy_pin(tc_busy_pin_),
@@ -46,27 +46,27 @@ void TCM2::begin()
 
 uint16_t TCM2::getDeviceInfo(char *buffer)
 {
-    return sendAndReadString(CMD_GET_DEVICE_INFO, 0x01, 0, buffer);
+    return sendAndReadString(TCM2_CMD_GET_DEVICE_INFO, 0x01, 0, buffer);
 }
 
 uint16_t TCM2::getDeviceId(char *buffer)
 {
-    return sendAndReadString(CMD_GET_DEVICE_ID, 0x01, LE_GET_DEVICE_ID, buffer);
+    return sendAndReadString(TCM2_CMD_GET_DEVICE_ID, 0x01, TCM2_LE_GET_DEVICE_ID, buffer);
 }
 
 uint16_t TCM2::getSystemInfo(char *buffer)
 {
-    return sendAndReadString(CMD_GET_SYSTEM_INFO, 0x01, 0, buffer);
+    return sendAndReadString(TCM2_CMD_GET_SYSTEM_INFO, 0x01, 0, buffer);
 }
 
 uint16_t TCM2::getSystemVersionCode(char *buffer)
 {
-    return sendAndReadString(CMD_GET_SYSTEM_VERSION_CODE, 0x01, 0x10, buffer);
+    return sendAndReadString(TCM2_CMD_GET_SYSTEM_VERSION_CODE, 0x01, 0x10, buffer);
 }
 
 uint16_t TCM2::getSensorData(char *buffer)
 {
-    return sendAndReadString(CMD_GET_SENSOR_DATA, 0, LE_GET_SENSOR_DATA, buffer);
+    return sendAndReadString(TCM2_CMD_GET_SENSOR_DATA, 0, TCM2_LE_GET_SENSOR_DATA, buffer);
 }
 
 uint16_t TCM2::getTemperature(float *temperature)
@@ -74,8 +74,8 @@ uint16_t TCM2::getTemperature(float *temperature)
     char buffer[2];
     uint16_t rc = getSensorData(buffer);
 
-    if (rc == EP_SW_NORMAL_PROCESSING) {
-        *temperature = TEMPERATURE_LF_M * (float)buffer[1] + TEMPERATURE_LF_P;
+    if (rc == TCM2_EP_SW_NORMAL_PROCESSING) {
+        *temperature = TCM2_TEMPERATURE_LF_M * (float)buffer[1] + TCM2_TEMPERATURE_LF_P;
     }
 
     return rc;
@@ -83,12 +83,12 @@ uint16_t TCM2::getTemperature(float *temperature)
 
 uint16_t TCM2::resetDataPointer()
 {
-    return sendCommand(CMD_RESET_DATA_POINTER, 0);
+    return sendCommand(TCM2_CMD_RESET_DATA_POINTER, 0);
 }
 
 uint16_t TCM2::uploadImageData(const char *buffer, uint8_t length)
 {
-    uint16_t rc = sendCommand(CMD_UPLOAD_IMAGE_DATA, 0, length, (uint8_t*)buffer);
+    uint16_t rc = sendCommand(TCM2_CMD_UPLOAD_IMAGE_DATA, 0, length, (uint8_t*)buffer);
     // ErrataSheet_rA, solution 1
     delayMicroseconds(1200);
 
@@ -97,33 +97,33 @@ uint16_t TCM2::uploadImageData(const char *buffer, uint8_t length)
 
 uint16_t TCM2::displayUpdate()
 {
-    return sendCommand(CMD_DISPLAY_UPDATE_DEFAULT);
+    return sendCommand(TCM2_CMD_DISPLAY_UPDATE_DEFAULT);
 }
 
 void TCM2::startTransmission()
 {
     digitalWrite(ss_pin, LOW);
-    delayMicroseconds(SS_ASSERT_DELAY_US);
+    delayMicroseconds(TCM2_SS_ASSERT_DELAY_US);
     SPI.beginTransaction(spiSettings);
 }
 
 void TCM2::endTransmission()
 {
     SPI.endTransaction();
-    delayMicroseconds(SS_DEASSERT_DELAY_US);
+    delayMicroseconds(TCM2_SS_DEASSERT_DELAY_US);
     digitalWrite(ss_pin, HIGH);
 }
 
 void TCM2::busyWait()
 {
-    delayMicroseconds(BUSY_WAIT_DELAY_US);
+    delayMicroseconds(TCM2_BUSY_WAIT_DELAY_US);
     while(digitalRead(tc_busy_pin) == LOW) {
         #ifdef DEBUG
         Serial.print(".");
         delay(10);
         #endif
     };
-    delayMicroseconds(BUSY_RELEASE_DELAY_US);
+    delayMicroseconds(TCM2_BUSY_RELEASE_DELAY_US);
 }
 
 uint16_t TCM2::sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t *data)
@@ -158,7 +158,7 @@ uint16_t TCM2::sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t *dat
     busyWait();
 
     #ifdef DEBUG
-    if (rc != EP_SW_NORMAL_PROCESSING) {
+    if (rc != TCM2_EP_SW_NORMAL_PROCESSING) {
         Serial.print(" ERR=");
         Serial.println(rc, HEX);
     } else {
