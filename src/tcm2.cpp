@@ -1,5 +1,5 @@
 /*
-Weatherpod - WiFi E-ink weather widget
+TCM2lib - MPico TCS gen2 E-ink arduino driver
 Copyright (C) 2016  OXullo Intersecans <x@brainrapers.org>
 
 This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 SPISettings TCM2::spiSettings(SPI_SPEED, MSBFIRST, SPI_MODE3);
 
-TCM2::TCM2()
+TCM2::TCM2(uint8_t tc_busy_pin_, uint8_t tc_enable_pin_, uint8_t ss_pin_) :
+    tc_busy_pin(tc_busy_pin_),
+    tc_enable_pin(tc_enable_pin_),
+    ss_pin(ss_pin_)
 {
 }
 
@@ -30,16 +33,16 @@ void TCM2::begin()
     // pinMode(LED_PIN, OUTPUT);
     // digitalWrite(LED_PIN, HIGH);
 
-    digitalWrite(SS_PIN, HIGH);
-    pinMode(SS_PIN, OUTPUT);
+    digitalWrite(ss_pin, HIGH);
+    pinMode(ss_pin, OUTPUT);
 
     // Necessary to prepare the clock for a falling edge
     SPI.beginTransaction(spiSettings);
     SPI.endTransaction();
 
     // Serial.println("Waking up TCM");
-    pinMode(TC_ENABLE_PIN, OUTPUT);
-    digitalWrite(TC_ENABLE_PIN, LOW);
+    pinMode(tc_enable_pin, OUTPUT);
+    digitalWrite(tc_enable_pin, LOW);
     delay(100);
     busyWait();
 
@@ -61,7 +64,7 @@ uint16_t TCM2::uploadImageData(const char *buffer, uint8_t length)
     uint16_t rc = sendCommand(0x20, 0x01, 0x00, length, (uint8_t*)buffer);
     // ErrataSheet_rA, solution 1
     delayMicroseconds(1200);
-    
+
     return rc;
 }
 
@@ -72,7 +75,7 @@ uint16_t TCM2::displayUpdate()
 
 void TCM2::startTransmission()
 {
-    digitalWrite(SS_PIN, LOW);
+    digitalWrite(ss_pin, LOW);
     delayMicroseconds(SS_ASSERT_DELAY_US);
     SPI.beginTransaction(spiSettings);
 }
@@ -81,13 +84,13 @@ void TCM2::endTransmission()
 {
     SPI.endTransaction();
     delayMicroseconds(SS_DEASSERT_DELAY_US);
-    digitalWrite(SS_PIN, HIGH);
+    digitalWrite(ss_pin, HIGH);
 }
 
 void TCM2::busyWait()
 {
     delayMicroseconds(BUSY_WAIT_DELAY_US);
-    while(digitalRead(TC_BUSY_PIN) == LOW) {
+    while(digitalRead(tc_busy_pin) == LOW) {
         #ifdef DEBUG
         Serial.print(".");
         delay(10);
@@ -178,11 +181,11 @@ uint16_t TCM2::sendCommand(uint8_t ins, uint8_t p1, uint8_t p2)
 void TCM2::dumpLinesStates()
 {
     Serial.print("SS=");
-    Serial.print(digitalRead(SS_PIN));
+    Serial.print(digitalRead(ss_pin));
     Serial.print(" TC_ENA=");
-    Serial.print(digitalRead(TC_ENABLE_PIN));
+    Serial.print(digitalRead(tc_enable_pin));
     Serial.print(" TC_BUSY=");
-    Serial.print(digitalRead(TC_BUSY_PIN));
+    Serial.print(digitalRead(tc_busy_pin));
     Serial.print(" CLK=");
     Serial.print(digitalRead(13));
     Serial.print(" MISO=");
