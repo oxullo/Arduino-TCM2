@@ -41,6 +41,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TCM2_APPLY_UPLOAD_IMAGE_DATA_WORKAROUND
 
 typedef uint16_t TCM2Response;
+typedef enum TCM2DisplayUpdateMode {
+    TCM2_DISPLAY_UPDATE_MODE_DEFAULT,
+    TCM2_DISPLAY_UPDATE_MODE_FLASHLESS,
+    TCM2_DISPLAY_UPDATE_MODE_FLASHLESS_INVERTED
+} TCM2DisplayUpdateMode;
 
 class TCM2 {
 public:
@@ -63,7 +68,7 @@ public:
     TCM2Response uploadImageFixVal(uint8_t *buffer, uint8_t fb_slot, uint8_t length);
     TCM2Response uploadImageCopySlots(uint8_t fb_slot_dest, uint8_t fb_slot_source);
 
-    TCM2Response displayUpdate();
+    TCM2Response displayUpdate(TCM2DisplayUpdateMode mode=TCM2_DISPLAY_UPDATE_MODE_DEFAULT);
 
 private:
     static SPISettings spiSettings;

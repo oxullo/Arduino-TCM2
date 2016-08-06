@@ -152,9 +152,21 @@ TCM2Response TCM2::uploadImageCopySlots(uint8_t fb_slot_dest, uint8_t fb_slot_so
             TCM2_LC_UPLOAD_IMAGE_COPY_SLOTS, &fb_slot_source);
 }
 
-TCM2Response TCM2::displayUpdate()
+TCM2Response TCM2::displayUpdate(TCM2DisplayUpdateMode mode)
 {
-    return sendCommand(TCM2_CMD_DISPLAY_UPDATE_DEFAULT);
+    switch (mode) {
+        case TCM2_DISPLAY_UPDATE_MODE_DEFAULT:
+            return sendCommand(TCM2_CMD_DISPLAY_UPDATE_DEFAULT);
+            break;
+
+        case TCM2_DISPLAY_UPDATE_MODE_FLASHLESS:
+            return sendCommand(TCM2_CMD_DISPLAY_UPDATE_FLASHLESS);
+            break;
+
+        case TCM2_DISPLAY_UPDATE_MODE_FLASHLESS_INVERTED:
+            return sendCommand(TCM2_CMD_DISPLAY_UPDATE_FLASHLESS_INV);
+            break;
+    }
 }
 
 void TCM2::startTransmission()
