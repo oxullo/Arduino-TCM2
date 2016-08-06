@@ -114,6 +114,28 @@ TCM2Response TCM2::resetDataPointer()
     return sendCommand(TCM2_CMD_RESET_DATA_POINTER, 0);
 }
 
+TCM2Response TCM2::imageEraseFrameBuffer(uint8_t fb_slot)
+{
+    return sendCommand(TCM2_CMD_IMAGE_ERASE_FRAME_BUFFER, fb_slot);
+}
+
+TCM2Response TCM2::uploadImageSetROI(uint16_t xmin, uint16_t xmax, uint16_t ymin, uint16_t ymax)
+{
+    // Note: TCS2-P102 supports framebuffer slot selection, passed as P2
+    uint8_t buffer[TCM2_LE_UPLOAD_IMAGE_SET_ROI];
+
+    buffer[0] = xmin >> 8;
+    buffer[1] = xmin & 0xff;
+    buffer[2] = xmax >> 8;
+    buffer[3] = xmax & 0xff;
+    buffer[4] = ymin >> 8;
+    buffer[5] = ymin & 0xff;
+    buffer[6] = ymax >> 8;
+    buffer[7] = ymax & 0xff;
+
+    return sendCommand(TCM2_CMD_UPLOAD_IMAGE_SET_ROI, 0, TCM2_LE_UPLOAD_IMAGE_SET_ROI, buffer);
+}
+
 TCM2Response TCM2::displayUpdate()
 {
     return sendCommand(TCM2_CMD_DISPLAY_UPDATE_DEFAULT);

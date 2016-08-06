@@ -58,6 +58,8 @@ public:
     TCM2Response getImageData(char *buffer, uint8_t fb_slot, uint8_t length);
     TCM2Response getChecksum(uint16_t *checksum, uint8_t fb_slot);
     TCM2Response resetDataPointer();
+    TCM2Response imageEraseFrameBuffer(uint8_t fb_slot);
+    TCM2Response uploadImageSetROI(uint16_t xmin, uint16_t xmax, uint16_t ymin, uint16_t ymax);
 
     TCM2Response displayUpdate();
 
