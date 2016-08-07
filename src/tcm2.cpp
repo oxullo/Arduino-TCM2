@@ -89,13 +89,7 @@ TCM2Response TCM2::getTemperature(float *temperature)
 
 TCM2Response TCM2::uploadImageData(const char *data, uint8_t length)
 {
-    TCM2Response res = sendCommand(TCM2_CMD_UPLOAD_IMAGE_DATA, 0, length, (uint8_t *)data);
-    #ifdef TCM2_APPLY_UPLOAD_IMAGE_DATA_WORKAROUND
-    // ErrataSheet_rA, solution 1
-    delayMicroseconds(1200);
-    #endif
-
-    return res;
+    return sendCommand(TCM2_CMD_UPLOAD_IMAGE_DATA, 0, length, (uint8_t *)data);
 }
 
 TCM2Response TCM2::getImageData(char *buffer, TCM2FramebufferSlot fb_slot, uint8_t length)
@@ -236,6 +230,11 @@ TCM2Response TCM2::sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t 
     }
     #endif
 
+    #ifdef TCM2_APPLY_RESPONSE_READOUT_WORKAROUND
+    // ErrataSheet_rA, solution 1
+    delayMicroseconds(1200);
+    #endif
+
     return res;
 }
 
@@ -282,6 +281,11 @@ TCM2Response TCM2::sendAndReadData(uint16_t ins_p1, uint8_t p2, uint8_t le, char
     TCM2Response res = U8_TO_U16_MSB(SPI.transfer(0)) | U8_TO_U16_LSB(SPI.transfer(0));
     endTransmission();
     busyWait();
+
+    #ifdef TCM2_APPLY_RESPONSE_READOUT_WORKAROUND
+    // ErrataSheet_rA, solution 1
+    delayMicroseconds(1200);
+    #endif
 
     return res;
 }

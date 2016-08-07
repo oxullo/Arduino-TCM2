@@ -39,7 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Avoid to send data to the TC right after uploading an image data chunk
 // Check TCS2-P_ErrataSheet_rA.pdf page 3
-#define TCM2_APPLY_UPLOAD_IMAGE_DATA_WORKAROUND
+#define TCM2_APPLY_RESPONSE_READOUT_WORKAROUND
 
 typedef uint16_t TCM2Response;
 typedef enum TCM2DisplayUpdateMode {
