@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "tcm2.h"
+#include "TCM2.h"
 
 #define U16_MSB_TO_U8(u16) ((u16 >> 8) & 0xff)
 #define U16_LSB_TO_U8(u16) (u16 & 0xff)

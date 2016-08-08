@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SPI.h>
 
-#include "tcm2_regs.h"
+#include "TCM2_regs.h"
 
 // SPI interface speed. 1MHz seems to be the safest option
 #define TCM2_SPI_SPEED           1E06
