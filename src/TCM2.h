@@ -69,7 +69,7 @@ public:
             TCM2FramebufferSlot fb_slot=TCM2_FRAMEBUFFER_SLOT_AUTO);
     TCM2Response resetDataPointer();
     TCM2Response imageEraseFrameBuffer(TCM2FramebufferSlot fb_slot=TCM2_FRAMEBUFFER_SLOT_AUTO);
-    TCM2Response uploadImageSetROI(uint16_t xmin, uint16_t xmax, uint16_t ymin, uint16_t ymax);
+    TCM2Response uploadImageSetROI(uint16_t xmin, uint16_t ymin, uint16_t xmax, uint16_t ymax);
     TCM2Response uploadImageFixVal(const uint8_t *data, uint8_t length,
             TCM2FramebufferSlot fb_slot=TCM2_FRAMEBUFFER_SLOT_AUTO);
     TCM2Response uploadImageCopySlots(TCM2FramebufferSlot fb_slot_dest,

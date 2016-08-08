@@ -119,7 +119,7 @@ TCM2Response TCM2::imageEraseFrameBuffer(TCM2FramebufferSlot fb_slot)
     return sendCommand(TCM2_CMD_IMAGE_ERASE_FRAME_BUFFER, fb_slot);
 }
 
-TCM2Response TCM2::uploadImageSetROI(uint16_t xmin, uint16_t xmax, uint16_t ymin, uint16_t ymax)
+TCM2Response TCM2::uploadImageSetROI(uint16_t xmin, uint16_t ymin, uint16_t xmax, uint16_t ymax)
 {
     // Note: TCS2-P102 supports framebuffer slot selection, passed as P2
     uint8_t buffer[TCM2_LC_UPLOAD_IMAGE_SET_ROI];
