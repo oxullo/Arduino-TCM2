@@ -87,12 +87,12 @@ TCM2Response TCM2::getTemperature(float *temperature)
     return res;
 }
 
-TCM2Response TCM2::uploadImageData(const char *data, TCM2FramebufferSlot fb_slot, uint8_t length)
+TCM2Response TCM2::uploadImageData(const char *data, uint8_t length, TCM2FramebufferSlot fb_slot)
 {
     return sendCommand(TCM2_CMD_UPLOAD_IMAGE_DATA, fb_slot, length, (uint8_t *)data);
 }
 
-TCM2Response TCM2::getImageData(char *buffer, TCM2FramebufferSlot fb_slot, uint8_t length)
+TCM2Response TCM2::getImageData(char *buffer, uint8_t length, TCM2FramebufferSlot fb_slot)
 {
     return sendAndReadData(TCM2_CMD_GET_IMAGE_DATA, fb_slot, length, buffer);
 }
@@ -136,12 +136,14 @@ TCM2Response TCM2::uploadImageSetROI(uint16_t xmin, uint16_t xmax, uint16_t ymin
     return sendCommand(TCM2_CMD_UPLOAD_IMAGE_SET_ROI, 0, TCM2_LC_UPLOAD_IMAGE_SET_ROI, buffer);
 }
 
-TCM2Response TCM2::uploadImageFixVal(const uint8_t *data, TCM2FramebufferSlot fb_slot, uint8_t length)
+TCM2Response TCM2::uploadImageFixVal(const uint8_t *data, uint8_t length,
+        TCM2FramebufferSlot fb_slot)
 {
     return sendCommand(TCM2_CMD_UPLOAD_IMAGE_FIX_VAL, fb_slot, length, (uint8_t *)data);
 }
 
-TCM2Response TCM2::uploadImageCopySlots(TCM2FramebufferSlot fb_slot_dest, TCM2FramebufferSlot fb_slot_source)
+TCM2Response TCM2::uploadImageCopySlots(TCM2FramebufferSlot fb_slot_dest,
+        TCM2FramebufferSlot fb_slot_source)
 {
     return sendCommand(TCM2_CMD_UPLOAD_IMAGE_COPY_SLOTS, fb_slot_dest,
             TCM2_LC_UPLOAD_IMAGE_COPY_SLOTS, (uint8_t *)&fb_slot_source);
