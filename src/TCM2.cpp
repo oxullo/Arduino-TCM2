@@ -161,6 +161,10 @@ TCM2Response TCM2::displayUpdate(TCM2FramebufferSlot fb_slot, TCM2DisplayUpdateM
         case TCM2_DISPLAY_UPDATE_MODE_FLASHLESS_INVERTED:
             return sendCommand(TCM2_CMD_DISPLAY_UPDATE_FLASHLESS_INV, fb_slot);
             break;
+
+        default:
+            // Never reached
+            return TCM2_EP_SW_GENERAL_ERROR;
     }
 }
 
