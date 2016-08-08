@@ -87,9 +87,9 @@ TCM2Response TCM2::getTemperature(float *temperature)
     return res;
 }
 
-TCM2Response TCM2::uploadImageData(const char *data, uint8_t length)
+TCM2Response TCM2::uploadImageData(const char *data, TCM2FramebufferSlot fb_slot, uint8_t length)
 {
-    return sendCommand(TCM2_CMD_UPLOAD_IMAGE_DATA, 0, length, (uint8_t *)data);
+    return sendCommand(TCM2_CMD_UPLOAD_IMAGE_DATA, fb_slot, length, (uint8_t *)data);
 }
 
 TCM2Response TCM2::getImageData(char *buffer, TCM2FramebufferSlot fb_slot, uint8_t length)

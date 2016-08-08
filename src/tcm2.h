@@ -61,7 +61,7 @@ public:
     TCM2Response getSensorData(char *buffer);
     TCM2Response getTemperature(float *temperature);
 
-    TCM2Response uploadImageData(const char *data, uint8_t length);
+    TCM2Response uploadImageData(const char *data, TCM2FramebufferSlot fb_slot, uint8_t length);
     TCM2Response getImageData(char *buffer, TCM2FramebufferSlot fb_slot, uint8_t length);
     TCM2Response getChecksum(uint16_t *checksum, TCM2FramebufferSlot fb_slot);
     TCM2Response resetDataPointer();
