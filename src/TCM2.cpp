@@ -50,34 +50,34 @@ void TCM2::begin()
     busyWait();
 }
 
-TCM2Response TCM2::getDeviceInfo(char *buffer)
+TCM2Response TCM2::getDeviceInfo(uint8_t *buffer)
 {
     return sendAndReadData(TCM2_CMD_GET_DEVICE_INFO, 0x01, 0, buffer);
 }
 
-TCM2Response TCM2::getDeviceId(char *buffer)
+TCM2Response TCM2::getDeviceId(uint8_t *buffer)
 {
     return sendAndReadData(TCM2_CMD_GET_DEVICE_ID, 0x01, TCM2_LE_GET_DEVICE_ID, buffer);
 }
 
-TCM2Response TCM2::getSystemInfo(char *buffer)
+TCM2Response TCM2::getSystemInfo(uint8_t *buffer)
 {
     return sendAndReadData(TCM2_CMD_GET_SYSTEM_INFO, 0x01, 0, buffer);
 }
 
-TCM2Response TCM2::getSystemVersionCode(char *buffer)
+TCM2Response TCM2::getSystemVersionCode(uint8_t *buffer)
 {
     return sendAndReadData(TCM2_CMD_GET_SYSTEM_VERSION_CODE, 0x01, 0x10, buffer);
 }
 
-TCM2Response TCM2::getSensorData(char *buffer)
+TCM2Response TCM2::getSensorData(uint8_t *buffer)
 {
     return sendAndReadData(TCM2_CMD_GET_SENSOR_DATA, 0, TCM2_LE_GET_SENSOR_DATA, buffer);
 }
 
 TCM2Response TCM2::getTemperature(float *temperature)
 {
-    char buffer[2];
+    uint8_t buffer[2];
     TCM2Response res = getSensorData(buffer);
 
     if (res == TCM2_EP_SW_NORMAL_PROCESSING) {
@@ -87,19 +87,19 @@ TCM2Response TCM2::getTemperature(float *temperature)
     return res;
 }
 
-TCM2Response TCM2::uploadImageData(const char *data, uint8_t length, TCM2FramebufferSlot fb_slot)
+TCM2Response TCM2::uploadImageData(const uint8_t *data, uint8_t length, TCM2FramebufferSlot fb_slot)
 {
     return sendCommand(TCM2_CMD_UPLOAD_IMAGE_DATA, fb_slot, length, (uint8_t *)data);
 }
 
-TCM2Response TCM2::getImageData(char *buffer, uint8_t length, TCM2FramebufferSlot fb_slot)
+TCM2Response TCM2::getImageData(uint8_t *buffer, uint8_t length, TCM2FramebufferSlot fb_slot)
 {
     return sendAndReadData(TCM2_CMD_GET_IMAGE_DATA, fb_slot, length, buffer);
 }
 
 TCM2Response TCM2::getChecksum(uint16_t *checksum, TCM2FramebufferSlot fb_slot)
 {
-    char buffer[2];
+    uint8_t buffer[2];
     TCM2Response res = sendAndReadData(TCM2_CMD_GET_CHECKSUM, fb_slot, TCM2_LE_GET_CHECKSUM, buffer);
 
     if (res == TCM2_EP_SW_NORMAL_PROCESSING) {
@@ -254,7 +254,7 @@ TCM2Response TCM2::sendCommand(uint16_t ins_p1, uint8_t p2)
     return sendCommand(ins_p1, p2, 0, NULL);
 }
 
-TCM2Response TCM2::sendAndReadData(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer)
+TCM2Response TCM2::sendAndReadData(uint16_t ins_p1, uint8_t p2, uint8_t le, uint8_t *buffer)
 {
     startTransmission();
     SPI.transfer(U16_MSB_TO_U8(ins_p1));

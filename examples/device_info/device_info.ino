@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 TCM2 tcm(TCM2_BUSY_PIN, TCM2_ENABLE_PIN);
 
-char buffer[64];
+uint8_t buffer[64];
 
 void printDeviceInfo()
 {
@@ -31,7 +31,7 @@ void printDeviceInfo()
     Serial.print("getDeviceInfo res=");
     Serial.print(res, HEX);
     Serial.print(" data=");
-    Serial.println(buffer);
+    Serial.println((char *)buffer);
 }
 
 void printDeviceId()
@@ -56,7 +56,7 @@ void printSystemInfo()
     Serial.print("getSystemInfo res=");
     Serial.print(res, HEX);
     Serial.print(" data=");
-    Serial.println(buffer);
+    Serial.println((char *)buffer);
 }
 
 void printSystemVersionCode()

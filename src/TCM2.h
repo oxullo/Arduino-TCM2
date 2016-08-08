@@ -54,16 +54,16 @@ public:
     TCM2(uint8_t tc_busy_pin_, uint8_t tc_enable_pin_, uint8_t ss_pin_=SS);
 
     void begin();
-    TCM2Response getDeviceInfo(char *buffer);
-    TCM2Response getDeviceId(char *buffer);
-    TCM2Response getSystemInfo(char *buffer);
-    TCM2Response getSystemVersionCode(char *buffer);
-    TCM2Response getSensorData(char *buffer);
+    TCM2Response getDeviceInfo(uint8_t *buffer);
+    TCM2Response getDeviceId(uint8_t *buffer);
+    TCM2Response getSystemInfo(uint8_t *buffer);
+    TCM2Response getSystemVersionCode(uint8_t *buffer);
+    TCM2Response getSensorData(uint8_t *buffer);
     TCM2Response getTemperature(float *temperature);
 
-    TCM2Response uploadImageData(const char *data, uint8_t length,
+    TCM2Response uploadImageData(const uint8_t *data, uint8_t length,
             TCM2FramebufferSlot fb_slot=TCM2_FRAMEBUFFER_SLOT_AUTO);
-    TCM2Response getImageData(char *buffer, uint8_t length,
+    TCM2Response getImageData(uint8_t *buffer, uint8_t length,
             TCM2FramebufferSlot fb_slot=TCM2_FRAMEBUFFER_SLOT_AUTO);
     TCM2Response getChecksum(uint16_t *checksum,
             TCM2FramebufferSlot fb_slot=TCM2_FRAMEBUFFER_SLOT_AUTO);
@@ -90,7 +90,7 @@ private:
     TCM2Response sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t *data);
     TCM2Response sendCommand(uint16_t ins_p1, uint8_t p2);
     TCM2Response sendCommand(uint16_t ins_p1);
-    TCM2Response sendAndReadData(uint16_t ins_p1, uint8_t p2, uint8_t le, char *buffer);
+    TCM2Response sendAndReadData(uint16_t ins_p1, uint8_t p2, uint8_t le, uint8_t *buffer);
     void dumpLinesStates();
 };
 
