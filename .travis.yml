@@ -8,10 +8,10 @@ cache:
         - "~/.platformio"
 
 env:
-    - PLATFORMIO_CI_SRC=examples/device_info/device_info.ino
-    - PLATFORMIO_CI_SRC=examples/pattern_simple/pattern_simple.ino
-    - PLATFORMIO_CI_SRC=examples/pattern_roi/pattern_roi.ino
-    - PLATFORMIO_CI_SRC=examples/image_upload/image_upload.ino
+    - PLATFORMIO_CI_SRC=examples/device_info
+    - PLATFORMIO_CI_SRC=examples/pattern_simple
+    - PLATFORMIO_CI_SRC=examples/pattern_roi
+    - PLATFORMIO_CI_SRC=examples/image_upload
 
 install:
     - pip install -U platformio

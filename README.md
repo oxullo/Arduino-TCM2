@@ -1,5 +1,7 @@
 # Arduino-TCM2
 
+[![Build Status](https://travis-ci.org/oxullo/Arduino-TCM2.svg?branch=master)](https://travis-ci.org/oxullo/Arduino-TCM2)
+
 Arduino library for the MPico systems TCM2 (Timing Controller Module gen2) / TC2 (Timing Controller
 gen2) E-Ink display controller.
 
