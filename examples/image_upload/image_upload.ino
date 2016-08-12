@@ -16,14 +16,48 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*
+
+This example shows how to upload a test image to a free framebuffer and display it
+The bitmap can be generated using the tool epd_convert.py, located in the tools folder
+
+
+Arduino Pro mini 3V3 8MHz <> MPico TCM2
+
+2       -> /TC_BUSY
+3       -> /TC_EN
+10/SS   -> /TC_SS
+11/MOSI -> TC_MOSI
+12/MISO -> TC_MISO
+13/SCK  -> TC_SCK
+3.3V    -> VDDIN, VIN
+GND     -> GND
+
+Arduino MKR1000 <> MPico TCM2
+
+2       -> /TC_BUSY
+3       -> /TC_EN
+7       -> /TC_SS
+8/MOSI  -> TC_MOSI
+9/SCK   -> TC_SCK
+10/MISO -> TC_MISO
+VCC     -> VDDIN, VIN
+GND     -> GND
+
+*/
+
 #include <TCM2.h>
 
 #include "test_image.h"
 
 #define TCM2_BUSY_PIN       2
 #define TCM2_ENABLE_PIN     3
+#define TCM2_SPI_CS         10
+// Uncomment the following if running a MKR1000
+// #define TCM2_SPI_CS         7
 
-TCM2 tcm(TCM2_BUSY_PIN, TCM2_ENABLE_PIN);
+TCM2 tcm(TCM2_BUSY_PIN, TCM2_ENABLE_PIN, TCM2_SPI_CS);
+
 
 void uploadTestImage()
 {
