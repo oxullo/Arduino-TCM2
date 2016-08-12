@@ -1,0 +1,20 @@
+{
+    "name": "TCM2lib",
+    "keywords": "e-ink,display,graphics,tcm2,spi",
+    "description": "Arduino library for the MPico TCM2 E-Ink timings module",
+    "authors":
+    {
+        "name": "OXullo Intersecans",
+        "email": "x@brainrapers.org",
+        "url": "https://github.com/oxullo/",
+	    "maintainer": true
+    },
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/oxullo/Arduino-TCM2"
+    },
+    "version": "1.0.0",
+    "frameworks": "arduino",
+    "platforms": ["atmelavr", "atmelsam"]
+}
