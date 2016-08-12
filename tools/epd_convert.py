@@ -101,6 +101,8 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('infile', help='Input file (any graphic type is supported)')
     parser.add_argument('outfile', help='Output file (header file)')
+    parser.add_argument('--type', '-t', choices=['cheader', 'binary'], default='cheader',
+                        help='Output type')
 
     return parser.parse_args()
 
@@ -125,11 +127,17 @@ def run():
 
     data = convert(input_image)
 
-    context = {'file': args.infile, 'data': format_data(data)}
+    logger.info('Output type: %s' % args.type)
+    if args.type == 'cheader':
+        context = {'file': args.infile, 'data': format_data(data)}
 
-    fout = open(args.outfile, 'w')
-    fout.write(HFILE_TEMPLATE % context)
-    fout.close()
+        fout = open(args.outfile, 'w')
+        fout.write(HFILE_TEMPLATE % context)
+        fout.close()
+    else:
+        fout = open(args.outfile, 'wb')
+        fout.write(''.join([chr(c) for c in data]))
+        fout.close()
 
     logger.info('conversion terminated')
 
