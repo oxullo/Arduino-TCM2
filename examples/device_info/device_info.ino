@@ -49,9 +49,12 @@ GND     -> GND
 
 #define TCM2_BUSY_PIN       2
 #define TCM2_ENABLE_PIN     3
-#define TCM2_SPI_CS         10
 // Uncomment the following if running a MKR1000
 // #define TCM2_SPI_CS         7
+
+#ifndef TCM2_SPI_CS
+#define TCM2_SPI_CS         SS
+#endif
 
 TCM2 tcm(TCM2_BUSY_PIN, TCM2_ENABLE_PIN, TCM2_SPI_CS);
 
