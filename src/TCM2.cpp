@@ -200,9 +200,9 @@ TCM2Response TCM2::sendCommand(uint16_t ins_p1, uint8_t p2, uint8_t lc, uint8_t 
 {
     #ifdef DEBUG
     Serial.print("INS=");
-    Serial.print(ins, HEX);
+    Serial.print(U16_MSB_TO_U8(ins_p1), HEX);
     Serial.print(" P1=");
-    Serial.print(p1, HEX);
+    Serial.print(U16_LSB_TO_U8(ins_p1), HEX);
     Serial.print(" P2=");
     Serial.print(p2, HEX);
     Serial.print(" Lc=");
