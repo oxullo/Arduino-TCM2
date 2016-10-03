@@ -50,6 +50,12 @@ void TCM2::begin()
     busyWait();
 }
 
+void TCM2::end()
+{
+    pinMode(ss_pin, INPUT);
+    pinMode(tc_enable_pin, INPUT);
+}
+
 TCM2Response TCM2::getDeviceInfo(uint8_t *buffer)
 {
     return sendAndReadData(TCM2_CMD_GET_DEVICE_INFO, 0x01, 0, buffer);

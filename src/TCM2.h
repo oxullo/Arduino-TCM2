@@ -54,6 +54,7 @@ public:
     TCM2(uint8_t tc_busy_pin_, uint8_t tc_enable_pin_, uint8_t ss_pin_=SS);
 
     void begin();
+    void end();
     TCM2Response getDeviceInfo(uint8_t *buffer);
     TCM2Response getDeviceId(uint8_t *buffer);
     TCM2Response getSystemInfo(uint8_t *buffer);
