@@ -68,21 +68,44 @@ const unsigned char test_1bit[TOTAL_SIZE] PROGMEM = {
 '''
 BYTES_PER_LINE = 20
 
-def convert(im):
+def convert(im, epd_format):
+    if not epd_format == 0 and not epd_format == 2:
+        raise ValueError('EPD format type {} not implemented'.format(epd_format))
+
     assert im.size == (400, 300)
     assert im.mode == '1'
 
     data = EPD_HEADER[:]
 
-    # EPD pixel data format type 0
+    # Set pixel data format in header
+    data[6] = epd_format
+
+    # EPD pixel data format type 0 and 2
     for stride in xrange(im.size[0] * im.size[1] / 8):
         x = (stride * 8) % im.size[0]
         y = (stride * 8) / im.size[0]
 
         val = 0
+
+# Data format type 2
+# Input byte 0: assign to output byte bit 0
+# Input byte 1: assign to output byte bit 2
+# Input byte 2: assign to output byte bit 4
+# Input byte 3: assign to output byte bit 6
+# Input byte 4: assign to output byte bit 1
+# Input byte 5: assign to output byte bit 3
+# Input byte 6: assign to output byte bit 5
+# Input byte 7: assign to output byte bit 7
+
+        # for type 2
+        trans = [0, 2, 4, 6, 1, 3, 5, 7]
+
         for offs in xrange(8):
             if im.getpixel((x + offs, y)) == 0:
-                val |= 1 << (7 - offs)
+                if epd_format == 0:
+                    val |= 1 << (7 - offs)
+                elif epd_format == 2:
+                    val |= 1 << (7 - trans[offs])
 
         data.append(val)
 
@@ -103,6 +126,8 @@ def parse_args():
     parser.add_argument('outfile', help='Output file (header file)')
     parser.add_argument('--type', '-t', choices=['cheader', 'binary'], default='cheader',
                         help='Output type')
+    parser.add_argument('--epdformat', '-e', choices=['0', '2', '4'], default='0',
+                        help='EPD format type')
 
     return parser.parse_args()
 
@@ -115,8 +140,8 @@ def run():
 
     input_image = Image.open(args.infile)
 
-    logger.info('input file=%s size=%s format=%s mode=%s' % (args.infile, input_image.size,
-                                                        input_image.format, input_image.mode))
+    logger.info('input file=%s size=%s format=%s epd_format=%s mode=%s' % (args.infile, input_image.size,
+                                                        input_image.format, args.epdformat, input_image.mode))
     if input_image.size != (400, 300):
         logger.warning('the input image will be scaled to 400x300')
         input_image = input_image.resize((400, 300))
@@ -125,7 +150,7 @@ def run():
         logger.warning('the input image mode will be converted to bitmap')
         input_image = input_image.convert('1')
 
-    data = convert(input_image)
+    data = convert(input_image, int(args.epdformat))
 
     logger.info('Output type: %s' % args.type)
     if args.type == 'cheader':
